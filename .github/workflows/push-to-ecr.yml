@@ -1,4 +1,4 @@
-name: Push to ECR
+name: Generate and Push Swagger Documentation
 
 on:
   push:
@@ -8,74 +8,28 @@ on:
       - develop
   workflow_dispatch:
 
-# These permissions are needed to interact with GitHub's OIDC Token endpoint.
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  build:
+  generate-swagger:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Extract branch name on push
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-        shell: bash
-        run: echo "BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_ENV
-
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          audience: sts.amazonaws.com
-          role-to-assume: ${{ vars[format('{0}_AWS_ROLE_TO_ASSUME', env.BRANCH)] }}
-          aws-region: ${{ vars[format('{0}_AWS_REGION', env.BRANCH)] }}
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Login to ECR
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ steps.login-ecr.outputs.registry }}
-
-      - name: Set up Docker Buildkit
-        uses: docker/setup-buildx-action@v3
-
-      #      - name: Get Tags for Image
-      #        id: metadata
-      #        uses: docker/metadata-action@v3
-      #        with:
-      #          images: ${{ steps.login-ecr.outputs.registry }}/${{ github.event.repository.name }}
-      #          tags: |
-      #            type=raw,value=latest
-      #            type=raw,value=main
-      #            type=sha
-
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./server.Dockerfile
-          push: true
-          tags: |
-            ${{ steps.login-ecr.outputs.registry }}/${{ vars[format('{0}_AWS_ECR_NAME', env.BRANCH)] }}:${{ vars[format('{0}_AWS_ECR_TAG', env.BRANCH)] }}
-          # save cache (do not use, useless)
-#          cache-from: |
-#            type=registry,ref=${{ steps.login-ecr.outputs.registry }}/${{ vars[format('{0}_AWS_ECR_NAME', env.BRANCH)] }}:cache
-#          cache-to: |
-#            mode=max,image-manifest=true,oci-mediatypes=true,type=registry,ref=${{ steps.login-ecr.outputs.registry }}/${{ vars[format('{0}_AWS_ECR_NAME', env.BRANCH)] }}:cache
-          # disable "index images"
-          provenance: false
-
-      - name: Generar Swagger API documentation
+      - name: Install FastAPI and Pydantic
         run: |
-          python -m fastapi openapi > ./api-rtr/openapi.json
+          python -m pip install --upgrade pip
+          pip install "fastapi[standard]" pydantic
+
+      - name: Generate Swagger API documentation
+        run: python generate_openapi.py
+
 
       - name: Checkout docs branch
         run: |
