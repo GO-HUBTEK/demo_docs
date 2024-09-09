@@ -41,7 +41,7 @@ jobs:
           else
             echo "openapi.json generated successfully."
           fi
-      
+
       - name: Move or delete openapi.json
         run: |
           rm ./api-rtr/openapi.json || mv ./api-rtr/openapi.json ./api-rtr/openapi_backup.json
@@ -54,6 +54,11 @@ jobs:
 
       - name: Copy openapi.json to docs
         run: cp ./api-rtr/openapi.json ./openapi.json
+
+      - name: Add untracked files
+        run: |
+          git add openapi.json
+          git add app/
 
       - name: Commit and push docs update
         run: |
