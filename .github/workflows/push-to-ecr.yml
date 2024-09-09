@@ -41,6 +41,10 @@ jobs:
           else
             echo "openapi.json generated successfully."
           fi
+      
+      - name: Move or delete openapi.json
+        run: |
+          rm ./api-rtr/openapi.json || mv ./api-rtr/openapi.json ./api-rtr/openapi_backup.json
 
       - name: Checkout docs branch
         run: |
