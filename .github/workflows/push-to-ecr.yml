@@ -28,7 +28,7 @@ jobs:
           pip install "fastapi[standard]" pydantic
 
       - name: Generate Swagger API documentation
-        run: python generate_openapi.py
+        run: python script.py
 
 
       - name: Checkout docs branch
