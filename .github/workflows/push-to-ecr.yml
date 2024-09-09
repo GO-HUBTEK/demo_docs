@@ -47,6 +47,11 @@ jobs:
             git fetch origin docs
             git checkout docs || git checkout -b docs
 
+      - name: Pull latest changes from docs branch
+        run: git pull origin docs --rebase
+
+      - name: Copy openapi.json to docs
+        run: cp ./api-rtr/openapi.json ./openapi.json
 
       - name: Commit and push docs update
         run: |
