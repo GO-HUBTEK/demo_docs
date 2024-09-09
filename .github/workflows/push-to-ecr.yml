@@ -55,3 +55,4 @@ jobs:
           git add api-rtr/openapi.json
           git commit -m "Update Swagger documentation"
           git push origin docs
+
