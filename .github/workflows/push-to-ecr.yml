@@ -47,6 +47,9 @@ jobs:
             git fetch origin docs
             git checkout docs || git checkout -b docs
 
+      - name: Pull latest changes from docs branch
+        run: |
+          git pull origin docs --rebase
 
       - name: Commit and push docs update
         run: |
