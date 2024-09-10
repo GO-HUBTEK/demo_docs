@@ -51,12 +51,17 @@ jobs:
           mkdir -p ./docs
           mv ./api-rtr/openapi.json ./docs/openapi.json
 
+      - name: Stash uncommitted changes
+        run: git stash || echo "No changes to stash"
 
       - name: Checkout docs branch
         run: |
           git fetch origin docs
           git checkout docs || git checkout -b docs
           git pull origin docs --rebase
+          
+      - name: Apply stashed changes
+        run: git stash pop || echo "No stashed changes to apply"
 
       - name: Add untracked files
         run: |
