@@ -54,7 +54,7 @@ jobs:
       - name: Checkout docs branch
         run: |
           git fetch origin docs
-          git checkout docs || git checkout -b docs
+          git checkout --track origin/docs || git checkout -b docs
           git pull origin docs --rebase
 
       - name: Add untracked files
