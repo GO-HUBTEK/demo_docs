@@ -65,7 +65,7 @@ jobs:
       - name: Resolve merge conflicts (force theirs)
         run: |
           git config merge.ours.driver true
-          git add . -A
+          git add docs/openapi.json
           git commit -m "Resolved conflicts automatically" || echo "No conflicts to resolve"
 
       - name: Add untracked files
