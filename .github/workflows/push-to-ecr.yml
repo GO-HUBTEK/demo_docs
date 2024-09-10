@@ -67,3 +67,4 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "Update Swagger documentation" || echo "Nothing to commit"
           git push origin docs --force-with-lease
+          
