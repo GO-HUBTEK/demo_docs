@@ -19,7 +19,7 @@ class UserResponse(BaseModel):
     email: str
 
 
-@app.post("/users/", response_model=UserResponse, summary="Crear un usuarioeeeee", description="Este endpoint crea un nuevo usuario en el sistema.", tags=["Users"])
+@app.post("/userss/", response_model=UserResponse, summary="Crear un usuarioeeeee", description="Este endpoint crea un nuevo usuario en el sistema.", tags=["Users"])
 async def create_user(user: User):
     """
     Crea un nuevo usuario con la información proporcionada en el cuerpo de la solicitud.
