@@ -53,7 +53,7 @@ jobs:
           git pull origin docs --rebase
 
       - name: Copy openapi.json to docs
-        run: cp ./api-rtr/openapi.json ./openapi.json
+        run: cp ./api-rtr/openapi.json ./dist/openapi.json
 
       - name: Add untracked files
         run: |
