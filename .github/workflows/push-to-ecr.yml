@@ -51,26 +51,14 @@ jobs:
           mkdir -p ./docs
           mv ./api-rtr/openapi.json ./docs/openapi.json
 
-      - name: Stash uncommitted changes
-        run: git stash
-
       - name: Checkout docs branch
         run: |
           git fetch origin docs
           git checkout docs || git checkout -b docs
 
-      - name: Apply stashed changes
-        run: git stash pop || echo "No stashed changes to apply"
-
-      - name: Resolve merge conflicts (force theirs)
-        run: |
-          git config merge.ours.driver true
-          git add docs/openapi.json
-          git commit -m "Resolved conflicts automatically" || echo "No conflicts to resolve"
-
       - name: Add untracked files
         run: |
-          git add docs/openapi.json
+          git add ./docs/openapi.json
 
       - name: Commit and push docs update
         run: |
