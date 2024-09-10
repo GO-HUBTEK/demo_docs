@@ -35,7 +35,7 @@ jobs:
 
       - name: Remove pycache files
         run: |
-            rm -rf app/__pycache__
+          rm -rf app/__pycache__
 
       - name: Verify openapi.json exists
         run: |
@@ -45,6 +45,11 @@ jobs:
           else
             echo "openapi.json generated successfully."
           fi
+
+      - name: Move openapi.json to dist
+        run: |
+          mkdir -p ./dist
+          mv ./api-rtr/openapi.json ./dist/openapi.json
 
       - name: Stash uncommitted changes
         run: git stash
@@ -58,12 +63,9 @@ jobs:
       - name: Apply stashed changes
         run: git stash pop || echo "No stashed changes to apply"
 
-      - name: Copy openapi.json to docs
-        run: cp ./api-rtr/openapi.json ./dist/openapi.json
-
       - name: Add untracked files
         run: |
-          git add openapi.json
+          git add dist/openapi.json
           git add app/
 
       - name: Commit and push docs update
