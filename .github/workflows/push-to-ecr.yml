@@ -52,35 +52,30 @@ jobs:
           mv ./api-rtr/openapi.json ./docs/openapi.json
 
       - name: Stash uncommitted changes
-        run: git stash || echo "No changes to stash"
-
-      - name: Remove untracked files in docs
-        run: |
-          if [ -f ./docs/openapi.json ]; then
-            rm -f ./docs/openapi.json
-          fi
+        run: git stash
 
       - name: Checkout docs branch
         run: |
           git fetch origin docs
           git checkout docs || git checkout -b docs
-          git pull origin docs --rebase
 
       - name: Apply stashed changes
         run: git stash pop || echo "No stashed changes to apply"
 
+      - name: Resolve merge conflicts (force theirs)
+        run: |
+          git config merge.ours.driver true
+          git add . -A
+          git commit -m "Resolved conflicts automatically" || echo "No conflicts to resolve"
+
       - name: Add untracked files
         run: |
           git add docs/openapi.json
-          git add app/
 
       - name: Commit and push docs update
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add ./docs/openapi.json
+          git add api-rtr/openapi.json
           git commit -m "Update Swagger documentation"
-          git push origin docs --force
-          
-          
-          
+          git push origin docs --force-with-lease
