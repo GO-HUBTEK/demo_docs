@@ -54,12 +54,18 @@ jobs:
       - name: Stash uncommitted changes
         run: git stash || echo "No changes to stash"
 
+      - name: Remove untracked files in docs
+        run: |
+          if [ -f ./docs/openapi.json ]; then
+            rm -f ./docs/openapi.json
+          fi
+
       - name: Checkout docs branch
         run: |
           git fetch origin docs
           git checkout docs || git checkout -b docs
           git pull origin docs --rebase
-          
+
       - name: Apply stashed changes
         run: git stash pop || echo "No stashed changes to apply"
 
