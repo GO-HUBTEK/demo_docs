@@ -33,6 +33,10 @@ jobs:
       - name: Generate Swagger API documentation
         run: python script.py
 
+      - name: Remove pycache files
+        run: |
+            rm -rf app/__pycache__
+
       - name: Verify openapi.json exists
         run: |
           if [ ! -f ./api-rtr/openapi.json ]; then
