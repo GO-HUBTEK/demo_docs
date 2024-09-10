@@ -53,13 +53,13 @@ jobs:
       - name: Clean untracked files (except .gitignore)
         run: git clean -fdX
 
-      - name: Checkout docs branch
+      - name: Checkout docs branch and resolve conflicts
         run: |
           git fetch origin docs
-          git checkout --track origin/docs || git checkout -b docs
-          git pull origin docs
+          git checkout docs || git checkout -b docs
+          git pull origin docs --rebase || git pull origin docs --no-rebase
 
-      - name: Add only openapi.json
+      - name: Add untracked files
         run: |
           git add ./docs/openapi.json
 
