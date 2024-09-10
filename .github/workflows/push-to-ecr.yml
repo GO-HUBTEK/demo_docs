@@ -50,8 +50,8 @@ jobs:
           mkdir -p ./docs
           mv ./api-rtr/openapi.json ./docs/openapi.json
 
-      - name: Clean untracked files
-        run: git clean -fd
+      - name: Clean untracked files (except .gitignore)
+        run: git clean -fdX
 
       - name: Checkout docs branch
         run: |
@@ -59,7 +59,7 @@ jobs:
           git checkout --track origin/docs || git checkout -b docs
           git pull origin docs
 
-      - name: Add untracked files
+      - name: Add only openapi.json
         run: |
           git add ./docs/openapi.json
 
