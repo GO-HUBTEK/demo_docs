@@ -1,4 +1,4 @@
-from app.main import app  # Importa tu aplicación FastAPI
+from app.main import app 
 import json
 
 with open("./api-rtr/openapi.json", "w") as f:
