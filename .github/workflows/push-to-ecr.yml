@@ -51,6 +51,9 @@ jobs:
           mkdir -p ./docs
           mv ./api-rtr/openapi.json ./docs/openapi.json
 
+      - name: Clean untracked files
+        run: git clean -fd
+
       - name: Checkout docs branch
         run: |
           git fetch origin docs
@@ -66,4 +69,4 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "Update Swagger documentation" || echo "Nothing to commit"
-          git push origin docs --force-with-lease
+          git push origin docs
