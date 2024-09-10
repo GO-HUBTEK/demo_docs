@@ -31,5 +31,5 @@ async def create_user(user: User):
     return {
         "id": 1,
         "usernameeeeeeeee": user.username,
-        "email": user.email,
+        "emaillllllllllll": user.email,
     }
